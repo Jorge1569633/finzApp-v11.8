@@ -1,0 +1,590 @@
+/* General Styles */
+body {
+  background-color: #f8f9fa;
+}
+
+.container-fluid {
+  padding: 0;
+}
+
+#main-content {
+  padding: 20px;
+}
+
+/* Navbar and Logo Styles */
+.navbar {
+  padding: 0;
+  background: linear-gradient(135deg, #1e88e5, #1565c0) !important;
+}
+
+.finzapp-logo {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Enhanced 3D Navigation Links with 3D Text */
+.navbar-nav .nav-link {
+  color: #ffffff !important; 
+  padding: 0.8rem 1.2rem !important;
+  margin: 0.3rem 0.2rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #2196f3, #1976d2);
+  box-shadow: 
+    0 2px 4px rgba(0,0,0,0.2),
+    inset 0 1px 1px rgba(255,255,255,0.2),
+    inset 0 -1px 1px rgba(0,0,0,0.1);
+  text-shadow: 
+    2px 2px 2px rgba(0,0,0,0.5),
+    0 0 3px rgba(255,255,255,0.3);
+  position: relative;
+  overflow: hidden;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.navbar-nav .nav-link:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0));
+  border-radius: 8px 8px 0 0;
+}
+
+.navbar-nav .nav-link:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, #42a5f5, #1e88e5);
+  box-shadow: 
+    0 4px 8px rgba(0,0,0,0.3),
+    inset 0 1px 1px rgba(255,255,255,0.3),
+    inset 0 -1px 1px rgba(0,0,0,0.2);
+  text-shadow: 
+    3px 3px 3px rgba(0,0,0,0.6),
+    0 0 5px rgba(255,255,255,0.4);
+}
+
+.navbar-nav .nav-link:active {
+  transform: translateY(1px);
+  box-shadow: 
+    0 1px 2px rgba(0,0,0,0.2),
+    inset 0 1px 1px rgba(255,255,255,0.1);
+  text-shadow: 
+    1px 1px 1px rgba(0,0,0,0.4),
+    0 0 2px rgba(255,255,255,0.2);
+}
+
+.navbar-nav .nav-link.active {
+  background: linear-gradient(135deg, #64b5f6, #2196f3);
+  box-shadow: 
+    0 2px 4px rgba(0,0,0,0.3),
+    inset 0 1px 3px rgba(0,0,0,0.2);
+  text-shadow: 
+    2px 2px 4px rgba(0,0,0,0.7),
+    0 0 4px rgba(255,255,255,0.3);
+}
+
+/* Card Styles */
+.card {
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.input-group-credit-card {
+  display: flex;
+  gap: 10px;
+}
+
+.input-group-credit-card input {
+  width: 60px;
+  text-align: center;
+}
+
+/* Dashboard Styles */
+.dashboard-card {
+  height: 100%;
+  min-height: 200px;
+}
+
+.chart-container {
+  position: relative;
+  height: 300px;
+}
+
+/* Notification Styles */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px;
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+
+/* New Styles */
+.currency-flag {
+  width: 24px;
+  height: 16px;
+  margin-right: 8px;
+  vertical-align: middle;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+}
+
+#exchange-rates table {
+  margin-bottom: 0.5rem;
+}
+
+#exchange-rates td,
+#exchange-rates th {
+  vertical-align: middle;
+  padding: 0.75rem;
+}
+
+#exchange-rates tbody tr:hover {
+  background-color: rgba(0,123,255,0.05);
+}
+
+.user-banner {
+  background: linear-gradient(135deg, #42a5f5, #1976d2);
+  padding: 10px 20px;
+  color: white;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.user-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.user-info:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.user-emoji {
+  font-size: 1.5em;
+}
+
+.user-name {
+  font-weight: 500;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.emoji-selector {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1000;
+  max-width: 300px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+
+.emoji-option {
+  font-size: 1.5em;
+  padding: 8px;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 5px;
+  transition: all 0.2s ease;
+}
+
+.emoji-option:hover {
+  background: #f0f0f0;
+  transform: scale(1.1);
+}
+
+.emoji-selector-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
+}
+
+/* Chatbot Styles */
+.chat-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #1e88e5, #1565c0);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.chat-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+.chat-icon {
+  font-size: 24px;
+  color: white;
+}
+
+.chat-notification {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #dc3545;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-container {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 350px;
+  height: 500px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.chat-container.chat-open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
+
+.chat-button-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chat-header {
+  background: linear-gradient(135deg, #1e88e5, #1565c0);
+  color: white;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-header h3 {
+  margin: 0;
+  font-size: 1.1em;
+  font-weight: 500;
+}
+
+.chat-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5em;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.chat-messages {
+  flex-grow: 1;
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat-message {
+  max-width: 80%;
+  padding: 10px 15px;
+  border-radius: 15px;
+  margin: 5px 0;
+}
+
+.user-message {
+  background: #e3f2fd;
+  color: #1565c0;
+  align-self: flex-end;
+  border-bottom-right-radius: 5px;
+}
+
+.bot-message {
+  background: #f5f5f5;
+  color: #424242;
+  align-self: flex-start;
+  border-bottom-left-radius: 5px;
+}
+
+.chat-input-container {
+  padding: 15px;
+  border-top: 1px solid #eee;
+  display: flex;
+  gap: 10px;
+}
+
+.chat-input {
+  flex-grow: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.chat-input:focus {
+  border-color: #1e88e5;
+}
+
+.chat-send {
+  background: linear-gradient(135deg, #1e88e5, #1565c0);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.chat-send:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Profile Modal Styles */
+.profile-modal .modal-body {
+  padding: 20px;
+}
+
+.profile-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.profile-form label {
+  font-weight: 500;
+  color: #495057;
+}
+
+.profile-form .form-control {
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-form .form-control:focus {
+  border-color: #1e88e5;
+  box-shadow: 0 0 0 0.2rem rgba(30, 136, 229, 0.25);
+}
+
+.profile-modal .modal-footer {
+  border-top: 1px solid #dee2e6;
+  padding: 1rem;
+}
+
+.profile-modal .btn-delete-account {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.profile-modal .btn-delete-account:hover {
+  background: linear-gradient(135deg, #c82333, #bd2130);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* Contact Button Styles */
+.contact-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.contact-btn {
+  padding: 5px 15px;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.contact-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.email-btn {
+  background: linear-gradient(135deg, #42a5f5, #1976d2);
+}
+
+.whatsapp-btn {
+  background: linear-gradient(135deg, #25d366, #128c7e);
+}
+
+.internal-contact {
+  background: linear-gradient(135deg, #6610f2, #6f42c1);
+  border: none;
+  padding: 8px 16px;
+  color: white;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.internal-contact:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.internal-contact:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+/* Add message card styles */
+.message-card {
+  transition: all 0.3s ease;
+}
+
+.message-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.message-date {
+  color: #6c757d;
+  font-size: 0.9em;
+}
+
+.message-content {
+  margin: 10px 0;
+}
+
+.admin-response {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.admin-response h6 {
+  color: #0d6efd;
+  margin-bottom: 10px;
+}
+
+.admin-response p {
+  margin-bottom: 5px;
+}
+
+.admin-response small {
+  display: block;
+  text-align: right;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .input-group-credit-card {
+    flex-wrap: wrap;
+  }
+  
+  .input-group-credit-card input {
+    width: calc(25% - 8px);
+  }
+  
+  .dashboard-card {
+    min-height: 150px;
+  }
+  
+  .finzapp-logo {
+    height: 40px;
+  }
+  
+  /* Mobile navbar adjustments */
+  .navbar-nav .nav-link {
+    margin: 0.2rem 0;
+  }
+  
+  .navbar-toggler {
+    background: linear-gradient(135deg, #2196f3, #1976d2);
+    border: none;
+    box-shadow: 
+      0 2px 4px rgba(0,0,0,0.2),
+      inset 0 1px 1px rgba(255,255,255,0.2);
+    padding: 0.5rem 0.8rem;
+  }
+  
+  .navbar-toggler:focus {
+    box-shadow: 
+      0 0 0 0.2rem rgba(255,255,255,0.2),
+      0 2px 4px rgba(0,0,0,0.2),
+      inset 0 1px 1px rgba(255,255,255,0.2);
+  }
+}
+
+/* Add responsive styles for the chatbot */
+@media (max-width: 768px) {
+  .chat-container {
+    width: calc(100% - 40px);
+    height: 60vh;
+    bottom: 80px;
+  }
+  
+  .chat-button {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .chat-icon {
+    font-size: 20px;
+  }
+}

@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinzApp - Iniciar Sesión</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/auth.css">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function() {
+      emailjs.init("YOUR_USER_ID");
+    })();
+  </script>
+  <!-- Stripe -->
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    .version-badge {
+      background: linear-gradient(135deg, #0d6efd, #0a58ca);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.8em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 
+        0 2px 4px rgba(0,0,0,0.2),
+        inset 0 1px 1px rgba(255,255,255,0.2);
+    }
+
+    .version-badge:after {
+      content: 'BETA';
+      font-size: 0.7em;
+      background: #dc3545;
+      color: white;
+      padding: 2px 4px;
+      border-radius: 8px;
+      margin-left: 5px;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    .version-options {
+      display: grid;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .version-option {
+      padding: 20px;
+      border: 2px solid #dee2e6;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      background: white;
+    }
+
+    .version-option:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-color: #0d6efd;
+    }
+
+    .version-option h3 {
+      margin-bottom: 15px;
+      color: #0d6efd;
+    }
+
+    .version-option ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 20px;
+    }
+
+    .version-option ul li {
+      margin-bottom: 8px;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .version-option ul li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #28a745;
+    }
+
+    .premium-badge {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: #dc3545;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8em;
+      transform: rotate(15deg);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .beta-notice {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed #dee2e6;
+      text-align: center;
+    }
+
+    .selected-version-badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.9em;
+      text-align: center;
+    }
+
+    .selected-version-badge.free {
+      background: #e9ecef;
+      color: #495057;
+    }
+
+    .selected-version-badge.premium {
+      background: #0d6efd;
+      color: white;
+    }
+
+    .selected-version-badge.premium:after {
+      content: '(Beta)';
+      font-size: 0.8em;
+      margin-left: 5px;
+      opacity: 0.8;
+    }
+
+    .hero-section {
+      padding: 2rem 0;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .hero-image {
+      max-width: 80%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin: 1rem 0;
+    }
+
+    .hero-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .feature-item {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .feature-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #1565c0;
+    }
+
+    .version-options {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .version-comparison {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .version-comparison h3 {
+      color: #1565c0;
+      margin-bottom: 1.5rem;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-bottom: 2rem;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 1rem;
+      border: 1px solid #dee2e6;
+    }
+
+    .comparison-table th {
+      background: #f8f9fa;
+      font-weight: 600;
+    }
+
+    .comparison-table tr:nth-child(even) {
+      background: #f8f9fa;
+    }
+
+    .check-icon {
+      color: #28a745;
+      font-weight: bold;
+    }
+
+    .x-icon {
+      color: #dc3545;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <!-- Banner with Logo -->
+  <nav class="navbar navbar-dark bg-primary">
+    <div class="container-fluid justify-content-center">
+      <div class="navbar-brand d-flex align-items-center">
+        <img src="La App que tus finanzas necesitan.png" alt="FinzApp Logo" class="finzapp-logo">
+        <div class="version-badge">
+          <span id="current-version">v7.8 (Beta)</span>
+          <span class="version-info" onclick="showVersionModal()">🔄</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- New Hero Section -->
+  <div class="hero-section">
+    <div class="container">
+      <h1 class="mb-4">Simplifica tus Finanzas Personales</h1>
+      <img src="simplifica tus finanzas personales registra gastos con un solo clic, administra tus tarjetas de débito y crédito, y recibe alertas de vencimientos. Toma el control de tu dinero de forma fácil y se.png" 
+           alt="FinzApp Dashboard" 
+           class="hero-image">
+      
+      <div class="hero-features">
+        <div class="feature-item">
+          <div class="feature-icon">💳</div>
+          <h4 class="feature-title">Gestión de Tarjetas</h4>
+          <p>Administra tus tarjetas de débito y crédito en un solo lugar</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📊</div>
+          <h4 class="feature-title">Control de Gastos</h4>
+          <p>Registra y categoriza tus gastos con un solo clic</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">⏰</div>
+          <h4 class="feature-title">Alertas de Vencimientos</h4>
+          <p>Recibe notificaciones de pagos y vencimientos importantes</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📱</div>
+          <h4 class="feature-title">Acceso Multiplataforma</h4>
+          <p>Accede a tus finanzas desde cualquier dispositivo</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <!-- Version Comparison -->
+        <div class="version-comparison">
+          <h3>Elige el Plan Perfecto para Ti</h3>
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Características</th>
+                <th>Free</th>
+                <th>Premium</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Registro de Gastos</td>
+                <td><span class="check-icon">✓</span></td>
+                <td><span class="check-icon">✓</span></td>
+              </tr>
+              <tr>
+                <td>Operaciones Mensuales</td>
+                <td>30</td>
+                <td>Ilimitadas</td>
+              </tr>
+              <tr>
+                <td>Alertas de Vencimientos</td>
+                <td><span class="check-icon">✓</span></td>
+                <td><span class="check-icon">✓</span></td>
+              </tr>
+              <tr>
+                <td>Soporte Prioritario</td>
+                <td><span class="x-icon">×</span></td>
+                <td><span class="check-icon">✓</span></td>
+              </tr>
+              <tr>
+                <td>Reportes Avanzados</td>
+                <td><span class="x-icon">×</span></td>
+                <td><span class="check-icon">✓</span></td>
+              </tr>
+              <tr>
+                <td>Costo Mensual</td>
+                <td>Gratis</td>
+                <td>$1 USD</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Version Selection Cards -->
+        <div class="version-options">
+          <div class="card shadow mb-4" id="versionCard">
+            <div class="card-body">
+              <h2 class="text-center mb-4">Seleccionar Versión</h2>
+              <div class="version-options">
+                <div class="version-option free" onclick="selectVersion('free')">
+                  <h3>Free</h3>
+                  <ul>
+                    <li>Hasta 30 operaciones mensuales</li>
+                    <li>Funciones básicas</li>
+                    <li>Sin costo</li>
+                  </ul>
+                  <button class="btn btn-outline-primary w-100">Seleccionar</button>
+                </div>
+                <div class="version-option premium" onclick="selectVersion('premium')">
+                  <div class="premium-badge">Recomendado</div>
+                  <h3>Premium (Beta)</h3>
+                  <ul>
+                    <li>Operaciones ilimitadas</li>
+                    <li>Todas las funciones</li>
+                    <li>Soporte prioritario</li>
+                    <li>$1 USD mensual</li>
+                  </ul>
+                  <button class="btn btn-primary w-100">Seleccionar</button>
+                  <div class="beta-notice">
+                    <small class="text-muted">* Durante la fase beta, no se realizarán cargos reales</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Login Card - Initially Hidden -->
+          <div class="card shadow mb-4" id="loginCard" style="display: none;">
+            <div class="card-body">
+              <h2 class="text-center mb-4">Iniciar Sesión</h2>
+              <div class="selected-version-badge mb-3"></div>
+              <form id="loginForm">
+                <div class="form-group mb-3">
+                  <label>Email</label>
+                  <input type="email" class="form-control" id="email" required>
+                </div>
+                
+                <div class="form-group mb-3">
+                  <label>Contraseña</label>
+                  <input type="password" class="form-control" id="password" required>
+                </div>
+                
+                <div class="d-grid gap-2">
+                  <button type="submit" class="btn btn-primary">
+                    Iniciar Sesión
+                  </button>
+                  <button type="button" class="btn btn-secondary" onclick="backToVersionSelection()">
+                    Cambiar Versión
+                  </button>
+                  <a href="registro.html" class="btn btn-link">
+                    ¿No tienes cuenta? Regístrate
+                  </a>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Premium Payment Card - Initially Hidden -->
+          <div class="card shadow" id="premiumCard" style="display: none;">
+            <div class="card-body">
+              <h2 class="text-center mb-4">Activar Premium</h2>
+              <form id="paymentForm">
+                <div class="form-group mb-3">
+                  <label>Número de Tarjeta</label>
+                  <div id="card-element" class="form-control">
+                    <!-- Stripe Card Element will be inserted here -->
+                  </div>
+                  <div id="card-errors" class="invalid-feedback" style="display: block;"></div>
+                </div>
+
+                <div class="text-center mb-3">
+                  <p>Se realizará un cargo de $1 USD mensual</p>
+                </div>
+                
+                <div class="d-grid gap-2">
+                  <button type="submit" class="btn btn-primary" id="submitPayment">
+                    Pagar y Activar Premium
+                  </button>
+                  <button type="button" class="btn btn-secondary" onclick="backToVersionSelection()">
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Version History Modal -->
+  <div class="modal fade" id="versionModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Historial de Versiones</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="current-version-info mb-3">
+            <h6>Versión Actual: <span id="modal-current-version">v7.8 (Beta)</span></h6>
+            <small class="text-muted">Última actualización: <span id="last-update-date"></span></small>
+          </div>
+
+          <div class="version-history">
+            <h6>Historial</h6>
+            <div id="versionHistoryList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let selectedVersion = null;
+    const stripe = Stripe('your_publishable_key'); // Replace with your Stripe publishable key
+    let card;
+
+    function selectVersion(version) {
+      selectedVersion = version;
+      document.getElementById('versionCard').style.display = 'none';
+      
+      if (version === 'premium') {
+        document.getElementById('premiumCard').style.display = 'block';
+        initializeStripe();
+      } else {
+        // For free version, go directly to login
+        document.getElementById('loginCard').style.display = 'block';
+        document.querySelector('.selected-version-badge').innerHTML = 'Versión Free';
+        document.querySelector('.selected-version-badge').className = 'selected-version-badge free';
+      }
+    }
+
+    function backToVersionSelection() {
+      document.getElementById('versionCard').style.display = 'block';
+      document.getElementById('loginCard').style.display = 'none';
+      document.getElementById('premiumCard').style.display = 'none';
+      selectedVersion = null;
+    }
+
+    function initializeStripe() {
+      const elements = stripe.elements();
+      card = elements.create('card', {
+        style: {
+          base: {
+            fontSize: '16px',
+            color: '#32325d',
+          },
+        },
+      });
+      card.mount('#card-element');
+
+      card.addEventListener('change', function(event) {
+        const displayError = document.getElementById('card-errors');
+        if (event.error) {
+          displayError.textContent = event.error.message;
+        } else {
+          displayError.textContent = '';
+        }
+      });
+    }
+
+    async function handlePaymentSubmit(e) {
+      e.preventDefault();
+      const submitButton = document.getElementById('submitPayment');
+      submitButton.disabled = true;
+      
+      try {
+        // Beta testing - skip payment processing
+        alert('¡Beta Testing - Premium activado con éxito!\n\nNota: Durante la fase beta, no se realizará ningún cargo.');
+        
+        // Store premium flag for the session
+        sessionStorage.setItem('premium_beta', 'true');
+        
+        // Show login form for premium user
+        document.getElementById('premiumCard').style.display = 'none';
+        document.getElementById('loginCard').style.display = 'block';
+        document.querySelector('.selected-version-badge').innerHTML = 'Versión Premium (Beta)';
+        document.querySelector('.selected-version-badge').className = 'selected-version-badge premium';
+        
+      } catch (error) {
+        const errorElement = document.getElementById('card-errors');
+        errorElement.textContent = error.message;
+        submitButton.disabled = false;
+      }
+    }
+
+    function initVersionSystem() {
+      const history = JSON.parse(localStorage.getItem('finzapp_version_history') || '[]');
+      if (history.length > 0) {
+        const versionDisplays = document.querySelectorAll('#current-version, #modal-current-version');
+        versionDisplays.forEach(el => {
+          if (el) {
+            el.textContent = history[0].version;
+          }
+        });
+      }
+    }
+
+    function showVersionModal() {
+      const history = JSON.parse(localStorage.getItem('finzapp_version_history') || '[]');
+      if (history.length > 0) {
+        const versionDisplays = document.querySelectorAll('#current-version, #modal-current-version');
+        versionDisplays.forEach(el => {
+          if (el) {
+            el.textContent = history[0].version;
+          }
+        });
+      }
+      new bootstrap.Modal(document.getElementById('versionModal')).show();
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+      initVersionSystem();
+    });
+
+    document.getElementById('paymentForm').addEventListener('submit', handlePaymentSubmit);
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      // Import auth module
+      const { login } = await import('./js/auth.js');
+      
+      try {
+        // Login will now handle the redirect to index.html
+        await login(email, password);
+      } catch (error) {
+        alert('Error en el inicio de sesión: ' + error.message);
+      }
+    });
+  </script>
+</body>
+</html>

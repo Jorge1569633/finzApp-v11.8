@@ -1,0 +1,520 @@
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinzApp - Sistema de Finanzas Personales</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#007bff">
+  <link rel="apple-touch-icon" href="/icon-192x192.png">
+</head>
+<body>
+  <div id="app" class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <div class="navbar-brand d-flex align-items-center">
+          <img src="La App que tus finanzas necesitan.png" alt="FinzApp Logo" class="finzapp-logo">
+          <div class="version-badge">
+            <span id="current-version">v7.8 (Beta)</span>
+            <span class="version-info" onclick="showVersionModal()">🔄</span>
+          </div>
+        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="nav-dashboard">Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="nav-tarjetas">Tarjetas</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="nav-gastos">Gastos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="nav-ingresos">Ingresos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="nav-historial">Historial</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="nav-vencimientos">Vencimientos</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <div id="admin-access-container">
+                <!-- Admin access button will be added here if user is admin -->
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="btn-logout">Cerrar Sesión</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="user-banner">
+      <div class="d-flex justify-content-between align-items-center">
+        <div id="user-display">
+          <div class="user-info" onclick="showUserProfileModal()">
+            <span class="user-emoji"></span>
+            <span class="user-name"></span>
+          </div>
+        </div>
+        <div class="contact-buttons">
+          <button class="contact-btn email-btn" onclick="sendContactEmail()">
+            ✉️ Enviar Email
+          </button>
+          <button class="contact-btn whatsapp-btn" onclick="sendWhatsAppMessage()">
+            💬 WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content">
+      <!-- Content will be loaded dynamically -->
+    </div>
+  </div>
+
+  <!-- Version History Modal -->
+  <div class="modal fade" id="versionModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Historial de Versiones</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="current-version-info mb-3">
+            <h6>Versión Actual: <span id="modal-current-version">v7.8 (Beta)</span></h6>
+            <small class="text-muted">Última actualización: <span id="last-update-date"></span></small>
+          </div>
+
+          <form id="versionForm" class="mb-3">
+            <div class="input-group">
+              <input type="text" class="form-control" id="newVersion" 
+                     placeholder="Nueva versión (ej: v6.2)" pattern="v\d+\.\d+">
+              <input type="text" class="form-control" id="versionNotes" 
+                     placeholder="Notas de la versión">
+              <button class="btn btn-primary" type="submit">Actualizar</button>
+            </div>
+          </form>
+
+          <div class="version-history">
+            <h6>Historial</h6>
+            <div id="versionHistoryList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade profile-modal" id="userProfileModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Mi Perfil</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form class="profile-form" id="userProfileForm">
+            <div class="form-group mb-3" id="adminAccessSection">
+              <label>Acceso Administrador</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="adminKey" 
+                       placeholder="Ingrese clave de administrador">
+                <button class="btn btn-primary" type="button" onclick="verifyAdminAccess()">
+                  Verificar
+                </button>
+              </div>
+              <small class="text-muted">Solo para administradores autorizados</small>
+            </div>
+
+            <div class="form-group mb-3">
+              <label>Email</label>
+              <input type="email" class="form-control" id="profileEmail" readonly>
+            </div>
+            
+            <div class="form-group mb-3">
+              <label>Nombre</label>
+              <input type="text" class="form-control" id="profileName" required>
+            </div>
+            
+            <div class="form-group mb-3">
+              <label>Teléfono</label>
+              <input type="tel" class="form-control" id="profilePhone" 
+                     pattern="[0-9]{9}" placeholder="099123456">
+            </div>
+
+            <div class="form-group mb-3">
+              <label>Emoji</label>
+              <div class="emoji-preview" onclick="showEmojiSelector()" style="cursor: pointer;">
+                <span id="selectedEmoji">😊</span>
+                <small class="text-muted">(Click para cambiar)</small>
+              </div>
+              <input type="hidden" id="userEmoji" value="😊">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Cancelar
+          </button>
+          <button type="button" class="btn btn-primary" onclick="saveUserProfile()">
+            Guardar Cambios
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function verifyAdminAccess() {
+      const adminKey = document.getElementById('adminKey').value;
+      const { verifyAdminKey } = await import('./js/auth.js');
+      
+      if (verifyAdminKey(adminKey)) {
+        const auth = JSON.parse(localStorage.getItem('finzapp_auth') || '{}');
+        auth.type = 'admin';
+        localStorage.setItem('finzapp_auth', JSON.stringify(auth));
+        
+        // Update users collection
+        const users = JSON.parse(localStorage.getItem('finzapp_users') || '[]');
+        const userIndex = users.findIndex(u => u.email === auth.email);
+        if (userIndex !== -1) {
+          users[userIndex].type = 'admin';
+          localStorage.setItem('finzapp_users', JSON.stringify(users));
+        }
+        
+        alert('¡Acceso de administrador concedido!');
+        bootstrap.Modal.getInstance(document.getElementById('userProfileModal')).hide();
+        window.location.href = 'admin.html';
+      } else {
+        alert('Clave de administrador incorrecta');
+      }
+    }
+
+    function updateUserDisplay() {
+      const auth = JSON.parse(localStorage.getItem('finzapp_auth') || '{}');
+      const userDisplay = document.getElementById('user-display');
+      if (userDisplay) {
+        userDisplay.innerHTML = `
+          <div class="user-info" onclick="showUserProfileModal()">
+            <span class="user-emoji">${auth.emoji || '😊'}</span>
+            <span class="user-name">${auth.name || auth.email?.split('@')[0]}</span>
+          </div>
+        `;
+      }
+    }
+
+    function showUserProfileModal() {
+      const auth = JSON.parse(localStorage.getItem('finzapp_auth') || '{}');
+      if (!auth.email) return;
+      
+      // Populate form with current user data
+      document.getElementById('profileEmail').value = auth.email;
+      document.getElementById('profileName').value = auth.name || '';
+      document.getElementById('profilePhone').value = auth.phone || '';
+      document.getElementById('selectedEmoji').textContent = auth.emoji || '😊';
+      document.getElementById('userEmoji').value = auth.emoji || '😊';
+      
+      // Show/hide admin access section based on current user type
+      const adminSection = document.getElementById('adminAccessSection');
+      adminSection.style.display = auth.type === 'admin' ? 'none' : 'block';
+      
+      new bootstrap.Modal(document.getElementById('userProfileModal')).show();
+    }
+
+    async function saveUserProfile() {
+      const form = document.getElementById('userProfileForm');
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      
+      const auth = JSON.parse(localStorage.getItem('finzapp_auth') || '{}');
+      
+      // Prepare updates
+      const updates = {
+        name: document.getElementById('profileName').value,
+        phone: document.getElementById('profilePhone').value,
+        emoji: document.getElementById('userEmoji').value
+      };
+      
+      // Import auth module and update user data
+      const { updateUserData } = await import('./js/auth.js');
+      if (updateUserData(auth.email, updates)) {
+        // Update local auth data
+        Object.assign(auth, updates);
+        localStorage.setItem('finzapp_auth', JSON.stringify(auth));
+        
+        alert('Perfil actualizado correctamente');
+        bootstrap.Modal.getInstance(document.getElementById('userProfileModal')).hide();
+        
+        // Update display without full page reload
+        updateUserDisplay();
+      } else {
+        alert('Error al actualizar el perfil');
+      }
+    }
+
+    let currentEmojiSelector = null;
+
+    function showEmojiSelector() {
+      const emojis = ['😊', '🌟', '🚀', '🎯', '💫', '🌈', '🎨', '🎭', '🎪', '🎡', '🎢', '🎠', '🎮', '🎲', '🎰', '🎳', '🎯', '🎱', '🎤', '🎧'];
+      
+      // Remove existing selector if any
+      if (currentEmojiSelector) {
+        document.body.removeChild(currentEmojiSelector.backdrop);
+        document.body.removeChild(currentEmojiSelector.container);
+      }
+      
+      // Create backdrop
+      const backdrop = document.createElement('div');
+      backdrop.className = 'emoji-selector-backdrop';
+      document.body.appendChild(backdrop);
+      
+      // Create selector
+      const container = document.createElement('div');
+      container.className = 'emoji-selector';
+      container.innerHTML = emojis.map(emoji => 
+        `<div class="emoji-option" onclick="selectEmoji('${emoji}')">${emoji}</div>`
+      ).join('');
+      document.body.appendChild(container);
+      
+      currentEmojiSelector = { backdrop, container };
+      
+      // Close on backdrop click
+      backdrop.onclick = closeEmojiSelector;
+    }
+
+    function closeEmojiSelector() {
+      if (currentEmojiSelector) {
+        document.body.removeChild(currentEmojiSelector.backdrop);
+        document.body.removeChild(currentEmojiSelector.container);
+        currentEmojiSelector = null;
+      }
+    }
+
+    function selectEmoji(emoji) {
+      document.getElementById('selectedEmoji').textContent = emoji;
+      document.getElementById('userEmoji').value = emoji;
+      closeEmojiSelector();
+    }
+
+    async function sendContactEmail() {
+      const auth = JSON.parse(localStorage.getItem('finzapp_auth') || '{}');
+      if (!auth.email) {
+        alert('Por favor inicie sesión para usar esta función');
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:3000/api/send-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            to: auth.email,
+            subject: 'Contacto FinzApp',
+            html: `
+              <h2>¡Hola ${auth.name || auth.email}!</h2>
+              <p>Gracias por contactarte con FinzApp.</p>
+              <p>Este es un email de prueba del sistema de contacto.</p>
+            `
+          })
+        });
+
+        if (response.ok) {
+          alert('Email enviado correctamente');
+        } else {
+          throw new Error('Error al enviar el email');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al enviar el email. Por favor intente nuevamente.');
+      }
+    }
+
+    async function sendWhatsAppMessage() {
+      const auth = JSON.parse(localStorage.getItem('finzapp_auth') || '{}');
+      if (!auth.phone) {
+        alert('Por favor configure su número de teléfono en su perfil para usar WhatsApp');
+        return;
+      }
+
+      // Format phone number to international format for Uruguay
+      const phoneNumber = auth.phone.startsWith('598') ? auth.phone : '598' + auth.phone;
+
+      try {
+        const response = await fetch('http://localhost:3000/api/send-whatsapp', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            to: phoneNumber,
+            body: `¡Hola ${auth.name || auth.email}! Este es un mensaje de prueba de FinzApp.`
+          })
+        });
+
+        if (response.ok) {
+          alert('Mensaje de WhatsApp enviado correctamente');
+        } else {
+          throw new Error('Error al enviar el mensaje de WhatsApp');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al enviar el mensaje de WhatsApp. Por favor intente nuevamente.');
+      }
+    }
+
+    function loadVersionHistory() {
+      const history = JSON.parse(localStorage.getItem('finzapp_version_history') || '[]');
+      if (history.length === 0) {
+        // Initialize with current version if no history exists
+        history.push({
+          version: 'v7.8 (Beta)',
+          notes: 'Sincronización de versiones y mejoras en el sistema de control de versiones',
+          date: new Date().toISOString()
+        });
+        localStorage.setItem('finzapp_version_history', JSON.stringify(history));
+      }
+      
+      const lastVersion = history[0];
+      
+      // Update all version displays
+      const versionDisplays = document.querySelectorAll('#current-version, #modal-current-version');
+      versionDisplays.forEach(el => el.textContent = lastVersion.version);
+      
+      if (document.getElementById('last-update-date')) {
+        document.getElementById('last-update-date').textContent = 
+          new Date(lastVersion.date).toLocaleDateString('es-UY');
+      }
+
+      const historyList = document.getElementById('versionHistoryList');
+      if (historyList) {
+        historyList.innerHTML = history.map(version => `
+          <div class="version-history-item">
+            <h6>${version.version}</h6>
+            ${version.notes ? `<p>${version.notes}</p>` : ''}
+            <small>${new Date(version.date).toLocaleDateString('es-UY')}</small>
+          </div>
+        `).join('');
+      }
+    }
+
+    document.getElementById('versionForm')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const auth = JSON.parse(localStorage.getItem('finzapp_auth') || '{}');
+      if (auth.type !== 'admin') {
+        alert('Solo los administradores pueden actualizar la versión');
+        return;
+      }
+
+      const newVersion = document.getElementById('newVersion').value;
+      const notes = document.getElementById('versionNotes').value;
+      
+      if (!newVersion.match(/^v\d+\.\d+( \(.*\))?$/)) {
+        alert('Formato de versión inválido. Use el formato v#.# (ej: v6.2) o v#.# (Versión)');
+        return;
+      }
+
+      const history = JSON.parse(localStorage.getItem('finzapp_version_history') || '[]');
+      history.unshift({
+        version: newVersion,
+        notes: notes,
+        date: new Date().toISOString()
+      });
+      
+      localStorage.setItem('finzapp_version_history', JSON.stringify(history));
+      
+      // Update displays immediately
+      loadVersionHistory();
+      
+      // Reset form
+      this.reset();
+      
+      // Notify success
+      alert('Versión actualizada correctamente');
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      loadVersionHistory();
+      updateUserDisplay();
+      updateAdminAccess();
+    });
+
+    function updateAdminAccess() {
+      const auth = JSON.parse(localStorage.getItem('finzapp_auth') || '{}');
+      const adminContainer = document.getElementById('admin-access-container');
+      
+      if (auth.type === 'admin') {
+        adminContainer.innerHTML = `
+          <button class="admin-button" onclick="window.location.href='admin.html'">
+            Panel Admin
+          </button>
+        `;
+      } else {
+        adminContainer.innerHTML = '';
+      }
+    }
+
+    window.showVersionModal = function() {
+      new bootstrap.Modal(document.getElementById('versionModal')).show();
+    };
+  </script>
+
+  <!-- Dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- jsPDF with AutoTable plugin -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+  <script>
+    window.jspdf = window.jspdf || {};
+  </script>
+
+  <!-- App Scripts -->
+  <script type="module" src="js/app.js"></script>
+
+  <!-- Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+        .then(registration => {
+          console.log('ServiceWorker registered with scope:', registration.scope);
+          
+          // Request notification permission
+          if (Notification.permission === 'default') {
+            Notification.requestPermission();
+          }
+        })
+        .catch(error => {
+          console.error('ServiceWorker registration failed:', error);
+        });
+      });
+    }
+  </script>
+
+  <!-- Add EmailJS SDK to index.html before closing body tag -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function() {
+      emailjs.init("your_user_id"); // Replace with your EmailJS user ID
+    })();
+  </script>
+</body>
+</html>
